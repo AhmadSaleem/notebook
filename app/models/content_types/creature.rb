@@ -7,6 +7,8 @@
 #
 #    exists within a Universe.
 class Creature < ActiveRecord::Base
+  acts_as_paranoid
+
   validates :name, presence: true
 
   belongs_to :user
@@ -43,5 +45,9 @@ class Creature < ActiveRecord::Base
 
   def self.content_name
     'creature'
+  end
+
+  def deleted_at
+    nil #hack
   end
 end

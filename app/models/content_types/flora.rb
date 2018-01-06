@@ -1,4 +1,6 @@
 class Flora < ActiveRecord::Base
+  acts_as_paranoid
+
   validates :name, presence: true
 
   belongs_to :user
@@ -34,5 +36,9 @@ class Flora < ActiveRecord::Base
 
   def self.icon
     'local_florist'
+  end
+
+  def deleted_at
+    nil #hack
   end
 end

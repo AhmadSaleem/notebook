@@ -23,6 +23,18 @@ en:
 
       cta:
         get_yours: Get Yours
+        writers:
+          header: For writers
+          body: Authors use Notebook.ai to create rich, immersive worlds to set their novels, stories, and plays in.
+          button: Learn more
+        roleplayers:
+          header: For roleplayers
+          body: Dungeon masters use Notebook.ai to build worlds for their campaigns that can be shared with players.
+          button: Learn more
+        designers:
+          header: For designers
+          body: Game design teams use Notebook.ai to collaborate and keep every aspect of their world in sync.
+          button: Learn more
 
       benefits:
         creativity:
@@ -100,7 +112,7 @@ en:
           price: $9/month
 
           universes_html: Plan <strong>unlimited</strong> universes
-          upload_html: Upload up to <strong>1GB</strong> of images
+          upload_html: Upload up to <strong>10GB</strong> of images
           characters_html: Plan <strong>unlimited</strong> characters
           locations_html: Plan <strong>unlimited</strong> locations
           items_html: Plan <strong>unlimited</strong> items
@@ -111,6 +123,7 @@ en:
           magics_html: Plan <strong>unlimited</strong> magic
           races_html: Plan <strong>unlimited</strong> races
           religions_html: Plan <strong>unlimited</strong> religions
+          floras_html: Plan <strong>unlimited</strong> flora
           scenes_html: Plan <strong>unlimited</strong> scenes
 
   footer:
@@ -137,6 +150,10 @@ en:
       group: Group
       magic: Magic
       language: Language
+      flora: Flora
+      town: Town
+      country: Country
+      landmark: Landmark
 
       scene: Scene
 
@@ -391,6 +408,47 @@ en:
         reproduction: How does %{name} reproduce and spread?
         seasonality: What seasons or climates is %{name} most often found in?
 
+      town:
+        name: What's the name of this town?
+        description: How would you describe %{name}?
+        other_names: What other names is %{name} known by?
+
+        laws: What are the major laws in %{name}?
+        sports: What sports are popular in %{name}?
+        politics: What are the politics like in %{name}?
+
+        founding_story: How was %{name} founded?
+        established_year: When was %{name} founded?
+
+      landmark:
+        name: What's the name of this landmark?
+        description: How would you describe %{name}?
+        other_names: What other names is %{name} known by?
+
+        size: How big is %{name}?
+        materials: What materials was %{name} constructed with?
+        colors: What color(s) is %{name}?
+
+        creation_story: How did %{name} originate?
+        established_year: When did %{name} originate?
+
+      country:
+        name: What's the name of this country?
+        description: How would you describe %{name}?
+        other_names: What other names is %{name} known by?
+
+        population: What is the population of %{name}?
+        currency: What currency is used in %{name}?
+        laws: What are the major laws in %{name}?
+        sports: What sports are popular in %{name}?
+
+        area: How big is %{name}?
+        crops: What crops does %{name} import or export?
+        climate: What is the climate like in %{name}?
+
+        founding_story: How was %{name} founded?
+        established_year: When was %{name} founded?
+        notable_wars: What notable wars has %{name} participated in?
 
     blacklist:
       _:
@@ -416,10 +474,13 @@ en:
     language: Design your own languages
     flora: The plants and nature of your world
     scene: Create scenes to organize a plot
+    town: Civilization's establishments
+    country: Kingdoms, countries, and regions
+    landmark: Statues, caves, peaks, and more
 
   content_descriptions:
     universe: >
-      Track multiple stories simultaneously by adding your characters and other ideas to the universe they
+      Track multiple stories simultaneously by organizing your ideas into just the universe they
       belong in.
     character: >
       From your heroes to the little guys that live in the background, everyone plays a role in strong
@@ -430,7 +491,7 @@ en:
     item: >
       Track books, weapons, artifacts, and other items in your world: who made them, owns them, and more.
     creature: >
-      Your personal bestiary includes the wildlife, plantlife, merfolk, and other interesting beings of
+      Your personal bestiary includes the wildlife, critters, merfolk, and other interesting beings of
       your world.
     race: >
       Humans are often joined by elves, orcs, werewolves, vampires, dragons, and a myriad of other races.
@@ -445,6 +506,12 @@ en:
       Language is the bond that weaves a culture's words together. Are there any new languages in your world?
     flora: >
       The plants, flowers, trees, and other nature in your world. Paint your landscape with rich flora.
+    town: >
+      Towns across the country are pockets of interesting life, filled with characters and more.
+    country: >
+      Kingdoms, countries, regions, and more. Huge swathes of land are often claimed quickly.
+    landmark: >
+      From the smallest statue to the biggest mountain, landmarks are littered across the land.
     scene: >
       Scenes are events that happen in your world, ranging in size from a nice breakfast to entire wars.
     attributefield: >
@@ -463,6 +530,40 @@ en:
 
   location_update_upload_map_error: >
     Location was updated, but your map did not upload. Please try again.
+
+  thredded:
+    nav:
+      all_messageboards: Notebook.ai Forums
+      settings: Settings
+      private_topics: Inbox
+    search:
+      form:
+        placeholder: Search Discussions
+    preferences:
+      global_preferences_title: Preferences
+      messageboard_preferences_nav_title: Per-category Settings
+    messageboard:
+      create: Create a New Discussion Board
+      topics_and_posts_counts: "%{topics_count} threads / %{posts_count} posts"
+      index:
+        page_title: Discussions
+    topics:
+      follow: Follow this discussion
+      form:
+        create_btn: Create New Discussion
+        title_placeholder_start: Start a New Discussion
+      following:
+        auto: You are following this discussion because auto-follow is enabled.
+        manual: You are following this discussion.
+        mentioned: You are following this discussion because you were mentioned on it.
+        posted: You are following this discussion because you posted to it.
+    posts:
+      delete: Delete reply
+      delete_confirm: Are you sure you want to delete this reply?
+      deleted_notice: Your reply has been deleted.
+      form:
+        create_btn: Post reply
+        title_label: Reply to this discussion
 
   body_types:
    - Delicate

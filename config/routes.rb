@@ -1,9 +1,28 @@
 # rubocop:disable LineLength
 
 Rails.application.routes.draw do
+  get 'customization/content_types'
+  post 'customization/toggle_content_type'
 
   devise_for :users, :controllers => { registrations: 'registrations' }
-  resources :users
+  resources :users do
+    get :characters, on: :member
+    get :locations,  on: :member
+    get :items,      on: :member
+    get :creatures,  on: :member
+    get :races,      on: :member
+    get :religions,  on: :member
+    get :magics,     on: :member
+    get :languages,  on: :member
+    get :floras,     on: :member
+    get :towns,      on: :member
+    get :countries,  on: :member
+    get :landmarks,  on: :member
+    get :scenes,     on: :member
+    get :groups,     on: :member
+    get :universes,  on: :member
+  end
+  delete 'contributor/:id/remove', to: 'contributors#destroy', as: :remove_contributor
 
   get '/unsubscribe/emails/:code', to: 'emails#one_click_unsubscribe'
 
@@ -53,6 +72,7 @@ Rails.application.routes.draw do
     end
   end
   resources :documents
+  delete 'delete_my_account', to: 'users#delete_my_account'
 
   # Lab apps
   scope '/app' do
@@ -87,6 +107,9 @@ Rails.application.routes.draw do
       get :floras,     on: :member
       get :scenes,     on: :member
       get :groups,     on: :member
+      get :countries,  on: :member
+      get :towns,      on: :member
+      get :landmarks,  on: :member
     end
     resources :characters do
       get :autocomplete_character_name, on: :collection, as: :autocomplete_name
@@ -103,6 +126,9 @@ Rails.application.routes.draw do
     resources :magics
     resources :languages
     resources :floras
+    resources :towns
+    resources :countries
+    resources :landmarks
 
     # Content usage
     resources :scenes
@@ -143,11 +169,15 @@ Rails.application.routes.draw do
     get '/items.csv', to: 'export#items_csv', as: :items_csv
     get '/creatures.csv', to: 'export#creatures_csv', as: :creatures_csv
     get '/races.csv', to: 'export#races_csv', as: :races_csv
+    get '/floras.csv', to: 'export#floras_csv', as: :floras_csv
     get '/religions.csv', to: 'export#religions_csv', as: :religions_csv
     get '/magics.csv', to: 'export#magics_csv', as: :magics_csv
     get '/languages.csv', to: 'export#languages_csv', as: :languages_csv
     get '/scenes.csv', to: 'export#scenes_csv', as: :scenes_csv
     get '/groups.csv', to: 'export#groups_csv', as: :groups_csv
+    get '/groups.csv', to: 'export#towns_csv', as: :towns_csv
+    get '/groups.csv', to: 'export#countries_csv', as: :countries_csv
+    get '/groups.csv', to: 'export#landmarks_csv', as: :landmarks_csv
   end
 
   scope '/scene/:scene_id' do
@@ -213,6 +243,8 @@ Rails.application.routes.draw do
   scope '/market' do
     get '/', to: 'main#comingsoon'
   end
+
+  mount Thredded::Engine => '/forum'
 end
 
 # rubocop:enable LineLength

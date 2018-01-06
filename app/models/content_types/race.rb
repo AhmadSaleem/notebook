@@ -5,6 +5,8 @@
 #
 # 1. each of the major divisions of sentient life, having distinct physical characteristics
 class Race < ActiveRecord::Base
+  acts_as_paranoid
+
   validates :name, presence: true
 
   belongs_to :user
@@ -38,5 +40,9 @@ class Race < ActiveRecord::Base
 
   def self.content_name
     'race'
+  end
+
+  def deleted_at
+    nil #hack
   end
 end

@@ -1,4 +1,6 @@
 class Language < ActiveRecord::Base
+  acts_as_paranoid
+
   validates :name, presence: true
 
   belongs_to :user
@@ -34,5 +36,9 @@ class Language < ActiveRecord::Base
 
   def self.content_name
     'language'
+  end
+
+  def deleted_at
+    nil #hack
   end
 end

@@ -7,6 +7,8 @@
 #
 #    exists within a Universe
 class Location < ActiveRecord::Base
+  acts_as_paranoid
+
   has_attached_file :map, styles: { original: '1920x1080>', thumb: '200x200>' }
   validates_attachment_content_type :map, content_type: %r{\Aimage\/.*\Z}
 
@@ -49,5 +51,9 @@ class Location < ActiveRecord::Base
 
   def self.content_name
     'location'
+  end
+
+  def deleted_at
+    nil #hack
   end
 end

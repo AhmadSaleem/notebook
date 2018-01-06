@@ -6,6 +6,7 @@
 #
 #    contains all canonically-related content created by Users
 class Universe < ActiveRecord::Base
+  acts_as_paranoid
 
   include HasAttributes
   include HasPrivacy
@@ -18,6 +19,7 @@ class Universe < ActiveRecord::Base
   self.authorizer_name = 'UniverseCoreContentAuthorizer'
 
   validates :name, presence: true
+  validates :user_id, presence: true
 
   belongs_to :user
   # Core content types
@@ -32,9 +34,14 @@ class Universe < ActiveRecord::Base
   has_many :magics
   has_many :languages
   has_many :floras
+  has_many :towns
+  has_many :countries
+  has_many :landmarks
 
   has_many :scenes
   has_many :groups
+
+  has_many :contributors, dependent: :destroy
 
   scope :is_public, -> { where(privacy: 'public') }
 
@@ -59,5 +66,9 @@ class Universe < ActiveRecord::Base
 
   def self.content_name
     'universe'
+  end
+
+  def deleted_at
+    nil #hack
   end
 end

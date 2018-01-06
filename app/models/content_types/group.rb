@@ -1,4 +1,6 @@
 class Group < ActiveRecord::Base
+  acts_as_paranoid
+
   validates :name, presence: true
 
   belongs_to :user
@@ -52,5 +54,9 @@ class Group < ActiveRecord::Base
 
   def self.content_name
     'group'
+  end
+
+  def deleted_at
+    nil #hack
   end
 end

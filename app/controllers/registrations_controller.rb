@@ -15,12 +15,21 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def account_update_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :current_password, :email_updates, :fluid_preference)
+    params.require(:user).permit(:name, :email, :username, :password, :password_confirmation, :email_updates, :fluid_preference)
+  end
+
+  def update_resource(resource, params)
+    resource.update_without_password(params)
   end
 
   protected
 
   def add_account
+    # Tie any universe contributor invites with this email to this user
+    if resource.persisted?
+      Contributor.where(email: resource.email, user_id: nil).update_all(user_id: resource.id)
+    end
+
     # If the user was created in the last 60 seconds, report it to Slack
     if resource.persisted?
       report_new_account_to_slack resource

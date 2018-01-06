@@ -3,6 +3,8 @@ require 'digest/md5'
 ##
 # a person using the Notebook.ai web application. Owns all other content.
 class User < ActiveRecord::Base
+  acts_as_paranoid
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -11,11 +13,14 @@ class User < ActiveRecord::Base
   include HasContent
   include Authority::UserAbilities
 
-  validates :email, presence: true
-  #todo: We probably want a uniqueness constraint on email
+  validates_uniqueness_of :username, allow_nil: true, allow_blank: true
 
   has_many :subscriptions
   has_many :billing_plans, through: :subscriptions
+  def on_premium_plan?
+    BillingPlan::PREMIUM_IDS.include?(self.selected_billing_plan_id)
+  end
+
   has_many :image_uploads
 
   has_one :referral_code
@@ -30,17 +35,34 @@ class User < ActiveRecord::Base
 
   has_many :content_change_events
 
+  has_many :user_content_type_activators
+
+  def contributable_universes
+    # todo email confirmation needs to happy for data safety / privacy (only verified emails)
+    contributor_by_email = Contributor.where(email: self.email).pluck(:universe_id)
+    contributor_by_user = Contributor.where(user: self).pluck(:universe_id)
+
+    Universe.where(id: contributor_by_email + contributor_by_user)
+  end
+  Rails.application.config.content_types[:all_non_universe].each do |content_type|
+    pluralized_content_type = content_type.name.downcase.pluralize
+    define_method "contributable_#{pluralized_content_type}" do
+      contributable_universes.flat_map do |universe|
+        universe.send(pluralized_content_type).where.not(user_id: self.id)
+      end
+    end
+  end
+
   # TODO: Swap this out with a has_many when we transition from a scratchpad to users having multiple documents
   has_one :document
 
   after_create :initialize_stripe_customer, unless: -> { Rails.env == 'test' }
   after_create :initialize_referral_code
   after_create :initialize_secure_code
+  after_create :initialize_content_type_activators
 
   def createable_content_types
-    [Universe, Character, Location, Item, Creature, Race, Religion, Group, Magic, Language, Scene].select do |c|
-      can_create? c
-    end
+    Rails.application.config.content_types[:all].select { |c| can_create? c }
   end
 
   # as_json creates a hash structure, which you then pass to ActiveSupport::json.encode to actually encode the object as a JSON string.
@@ -93,19 +115,48 @@ class User < ActiveRecord::Base
 
       # If we're creating this Customer in Stripe for the first time, we should also associate them with the free tier
       Stripe::Subscription.create(customer: self.stripe_customer_id, plan: 'starter')
-
-      self.stripe_customer_id
-    else
-      self.stripe_customer_id
     end
+
+    self.stripe_customer_id
   end
 
   def initialize_referral_code
-    ReferralCode.create user: self, code: SecureRandom.uuid
+    ReferralCode.create(user: self, code: SecureRandom.uuid)
   end
 
   def initialize_secure_code
-    update secure_code: SecureRandom.uuid unless secure_code.present?
+    update(secure_code: SecureRandom.uuid) unless secure_code.present?
+  end
+
+  def initialize_content_type_activators
+    to_activate = Rails.application.config.content_types[:always_on] + Rails.application.config.content_types[:default_on]
+
+    to_activate.uniq.each do |content_type|
+      user_content_type_activators.create(content_type: content_type.name)
+    end
+  end
+
+  def update_without_password(params, *options)
+    if params[:password].blank?
+      params.delete(:password)
+      params.delete(:password_confirmation) if params[:password_confirmation].blank?
+    end
+
+    if params[:username].blank?
+      params.delete(:username)
+    end
+
+    result = update_attributes(params, *options)
+    clean_up_passwords
+    result
+  end
+
+  def forum_username
+    username = self.username.present? ? "@#{self.username}" : nil
+    username ||= self.name.present? ? self.name : nil
+    username ||= 'Anonymous Author'
+
+    username
   end
 
   private
@@ -120,5 +171,9 @@ class User < ActiveRecord::Base
       :reset_password_token,
       :email
     ]
+  end
+
+  def deleted_at
+    nil #hack
   end
 end

@@ -1,4 +1,6 @@
 class Magic < ActiveRecord::Base
+  acts_as_paranoid
+
   validates :name, presence: true
 
   belongs_to :user
@@ -32,5 +34,9 @@ class Magic < ActiveRecord::Base
 
   def self.content_name
     'magic'
+  end
+
+  def deleted_at
+    nil #hack
   end
 end

@@ -4,14 +4,14 @@ class ExportController < ApplicationController
   def index
     Mixpanel::Tracker.new(Rails.application.config.mixpanel_token).track(current_user.id, 'viewed export page', {
       'content count': current_user.content_count
-    })
+    }) if Rails.env.production?
   end
 
   def report_to_mixpanel format, scope
     Mixpanel::Tracker.new(Rails.application.config.mixpanel_token).track(current_user.id, 'exported content', {
       'export format': format,
       'scope': scope
-    })
+    }) if Rails.env.production?
   end
 
   # Formats
@@ -46,6 +46,11 @@ class ExportController < ApplicationController
     send_data to_csv(current_user.races), filename: "races-#{Date.today}.csv"
   end
 
+  def floras_csv
+    report_to_mixpanel 'csv', 'flora'
+    send_data to_csv(current_user.floras), filename: "floras-#{Date.today}.csv"
+  end
+
   def religions_csv
     report_to_mixpanel 'csv', 'religions'
     send_data to_csv(current_user.religions), filename: "religions-#{Date.today}.csv"
@@ -64,6 +69,21 @@ class ExportController < ApplicationController
   def groups_csv
     report_to_mixpanel 'csv', 'groups'
     send_data to_csv(current_user.groups), filename: "groups-#{Date.today}.csv"
+  end
+
+  def towns_csv
+    report_to_mixpanel 'csv', 'towns'
+    send_data to_csv(current_user.towns), filename: "towns-#{Date.today}.csv"
+  end
+
+  def landmarks_csv
+    report_to_mixpanel 'csv', 'landmarks'
+    send_data to_csv(current_user.landmarks), filename: "landmarks-#{Date.today}.csv"
+  end
+
+  def countries_csv
+    report_to_mixpanel 'csv', 'countries'
+    send_data to_csv(current_user.countries), filename: "countries-#{Date.today}.csv"
   end
 
   def scenes_csv

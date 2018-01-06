@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731010449) do
+ActiveRecord::Schema.define(version: 20171231235747) do
 
   create_table "archenemyships", force: :cascade do |t|
     t.integer  "user_id"
@@ -105,6 +105,17 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.integer "capital_city_id"
   end
 
+  create_table "character_love_interests", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "character_id"
+    t.integer  "love_interest_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "character_love_interests", ["character_id"], name: "index_character_love_interests_on_character_id"
+  add_index "character_love_interests", ["user_id"], name: "index_character_love_interests_on_user_id"
+
   create_table "characters", force: :cascade do |t|
     t.string   "name",             null: false
     t.string   "role"
@@ -149,7 +160,10 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.string   "talents"
     t.string   "hobbies"
     t.string   "personality_type"
+    t.datetime "deleted_at"
   end
+
+  add_index "characters", ["deleted_at"], name: "index_characters_on_deleted_at"
 
   create_table "childrenships", force: :cascade do |t|
     t.integer "user_id"
@@ -168,6 +182,128 @@ ActiveRecord::Schema.define(version: 20170731010449) do
   end
 
   add_index "content_change_events", ["user_id"], name: "index_content_change_events_on_user_id"
+
+  create_table "contributors", force: :cascade do |t|
+    t.integer  "universe_id"
+    t.string   "email"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "contributors", ["universe_id"], name: "index_contributors_on_universe_id"
+  add_index "contributors", ["user_id"], name: "index_contributors_on_user_id"
+
+  create_table "countries", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "other_names"
+    t.integer  "universe_id"
+    t.string   "population"
+    t.string   "currency"
+    t.string   "laws"
+    t.string   "sports"
+    t.string   "area"
+    t.string   "crops"
+    t.string   "climate"
+    t.string   "founding_story"
+    t.string   "established_year"
+    t.string   "notable_wars"
+    t.string   "notes"
+    t.string   "private_notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.datetime "deleted_at"
+    t.string   "privacy"
+    t.integer  "user_id"
+  end
+
+  add_index "countries", ["universe_id"], name: "index_countries_on_universe_id"
+  add_index "countries", ["user_id"], name: "index_countries_on_user_id"
+
+  create_table "country_creatures", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "country_id"
+    t.integer  "creature_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "country_creatures", ["country_id"], name: "index_country_creatures_on_country_id"
+  add_index "country_creatures", ["creature_id"], name: "index_country_creatures_on_creature_id"
+  add_index "country_creatures", ["user_id"], name: "index_country_creatures_on_user_id"
+
+  create_table "country_floras", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "country_id"
+    t.integer  "flora_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "country_floras", ["country_id"], name: "index_country_floras_on_country_id"
+  add_index "country_floras", ["flora_id"], name: "index_country_floras_on_flora_id"
+  add_index "country_floras", ["user_id"], name: "index_country_floras_on_user_id"
+
+  create_table "country_landmarks", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "country_id"
+    t.integer  "landmark_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "country_landmarks", ["country_id"], name: "index_country_landmarks_on_country_id"
+  add_index "country_landmarks", ["landmark_id"], name: "index_country_landmarks_on_landmark_id"
+  add_index "country_landmarks", ["user_id"], name: "index_country_landmarks_on_user_id"
+
+  create_table "country_languages", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "country_id"
+    t.integer  "language_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "country_languages", ["country_id"], name: "index_country_languages_on_country_id"
+  add_index "country_languages", ["language_id"], name: "index_country_languages_on_language_id"
+  add_index "country_languages", ["user_id"], name: "index_country_languages_on_user_id"
+
+  create_table "country_locations", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "country_id"
+    t.integer  "location_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "country_locations", ["country_id"], name: "index_country_locations_on_country_id"
+  add_index "country_locations", ["location_id"], name: "index_country_locations_on_location_id"
+  add_index "country_locations", ["user_id"], name: "index_country_locations_on_user_id"
+
+  create_table "country_religions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "country_id"
+    t.integer  "religion_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "country_religions", ["country_id"], name: "index_country_religions_on_country_id"
+  add_index "country_religions", ["religion_id"], name: "index_country_religions_on_religion_id"
+  add_index "country_religions", ["user_id"], name: "index_country_religions_on_user_id"
+
+  create_table "country_towns", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "country_id"
+    t.integer  "town_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "country_towns", ["country_id"], name: "index_country_towns_on_country_id"
+  add_index "country_towns", ["town_id"], name: "index_country_towns_on_town_id"
+  add_index "country_towns", ["user_id"], name: "index_country_towns_on_user_id"
 
   create_table "creature_relationships", force: :cascade do |t|
     t.integer  "user_id"
@@ -209,7 +345,10 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.string   "notes"
     t.string   "private_notes"
     t.string   "privacy"
+    t.datetime "deleted_at"
   end
+
+  add_index "creatures", ["deleted_at"], name: "index_creatures_on_deleted_at"
 
   create_table "current_ownerships", force: :cascade do |t|
     t.integer "user_id"
@@ -222,6 +361,22 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.integer "deity_id"
     t.integer "user_id"
   end
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
   create_table "documents", force: :cascade do |t|
     t.integer  "user_id"
@@ -299,8 +454,10 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.string   "notes"
     t.string   "private_notes"
     t.string   "privacy"
+    t.datetime "deleted_at"
   end
 
+  add_index "floras", ["deleted_at"], name: "index_floras_on_deleted_at"
   add_index "floras", ["universe_id"], name: "index_floras_on_universe_id"
   add_index "floras", ["user_id"], name: "index_floras_on_user_id"
 
@@ -388,7 +545,10 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.string   "privacy"
+    t.datetime "deleted_at"
   end
+
+  add_index "groups", ["deleted_at"], name: "index_groups_on_deleted_at"
 
   create_table "headquarterships", force: :cascade do |t|
     t.integer "user_id"
@@ -429,13 +589,85 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "privacy",        default: "private", null: false
+    t.datetime "deleted_at"
   end
+
+  add_index "items", ["deleted_at"], name: "index_items_on_deleted_at"
 
   create_table "key_itemships", force: :cascade do |t|
     t.integer "user_id"
     t.integer "group_id"
     t.integer "key_item_id"
   end
+
+  create_table "landmark_countries", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "landmark_id"
+    t.integer  "country_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "landmark_countries", ["country_id"], name: "index_landmark_countries_on_country_id"
+  add_index "landmark_countries", ["landmark_id"], name: "index_landmark_countries_on_landmark_id"
+  add_index "landmark_countries", ["user_id"], name: "index_landmark_countries_on_user_id"
+
+  create_table "landmark_creatures", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "landmark_id"
+    t.integer  "creature_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "landmark_creatures", ["creature_id"], name: "index_landmark_creatures_on_creature_id"
+  add_index "landmark_creatures", ["landmark_id"], name: "index_landmark_creatures_on_landmark_id"
+  add_index "landmark_creatures", ["user_id"], name: "index_landmark_creatures_on_user_id"
+
+  create_table "landmark_floras", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "landmark_id"
+    t.integer  "flora_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "landmark_floras", ["flora_id"], name: "index_landmark_floras_on_flora_id"
+  add_index "landmark_floras", ["landmark_id"], name: "index_landmark_floras_on_landmark_id"
+  add_index "landmark_floras", ["user_id"], name: "index_landmark_floras_on_user_id"
+
+  create_table "landmark_nearby_towns", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "landmark_id"
+    t.integer  "nearby_town_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "landmark_nearby_towns", ["landmark_id"], name: "index_landmark_nearby_towns_on_landmark_id"
+  add_index "landmark_nearby_towns", ["user_id"], name: "index_landmark_nearby_towns_on_user_id"
+
+  create_table "landmarks", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "other_names"
+    t.integer  "universe_id"
+    t.string   "size"
+    t.string   "materials"
+    t.string   "colors"
+    t.string   "creation_story"
+    t.string   "established_year"
+    t.string   "notes"
+    t.string   "private_notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.datetime "deleted_at"
+    t.string   "privacy"
+    t.integer  "user_id"
+  end
+
+  add_index "landmarks", ["universe_id"], name: "index_landmarks_on_universe_id"
+  add_index "landmarks", ["user_id"], name: "index_landmarks_on_user_id"
 
   create_table "languages", force: :cascade do |t|
     t.string   "name"
@@ -455,7 +687,10 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.string   "privacy"
+    t.datetime "deleted_at"
   end
+
+  add_index "languages", ["deleted_at"], name: "index_languages_on_deleted_at"
 
   create_table "largest_cities_relationships", force: :cascade do |t|
     t.integer "user_id"
@@ -514,7 +749,10 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.string   "climate"
     t.string   "founding_story"
     t.string   "sports"
+    t.datetime "deleted_at"
   end
+
+  add_index "locations", ["deleted_at"], name: "index_locations_on_deleted_at"
 
   create_table "magic_deityships", force: :cascade do |t|
     t.integer "user_id"
@@ -543,7 +781,10 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.string   "privacy"
+    t.datetime "deleted_at"
   end
+
+  add_index "magics", ["deleted_at"], name: "index_magics_on_deleted_at"
 
   create_table "maker_relationships", force: :cascade do |t|
     t.integer "user_id"
@@ -628,7 +869,10 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.string   "privacy"
+    t.datetime "deleted_at"
   end
+
+  add_index "races", ["deleted_at"], name: "index_races_on_deleted_at"
 
   create_table "raceships", force: :cascade do |t|
     t.integer "user_id"
@@ -661,13 +905,6 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.datetime "updated_at",         null: false
   end
 
-  create_table "related_floras", force: :cascade do |t|
-    t.integer  "flora_id"
-    t.integer  "related_flora_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-  end
-
   create_table "religions", force: :cascade do |t|
     t.string   "name"
     t.string   "description"
@@ -689,7 +926,10 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.string   "privacy"
+    t.datetime "deleted_at"
   end
+
+  add_index "religions", ["deleted_at"], name: "index_religions_on_deleted_at"
 
   create_table "religious_figureships", force: :cascade do |t|
     t.integer "religion_id"
@@ -742,7 +982,10 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.string   "privacy"
+    t.datetime "deleted_at"
   end
+
+  add_index "scenes", ["deleted_at"], name: "index_scenes_on_deleted_at"
 
   create_table "sessions", force: :cascade do |t|
     t.string   "username",   null: false
@@ -1028,6 +1271,110 @@ ActiveRecord::Schema.define(version: 20170731010449) do
 
   add_index "thredded_user_topic_read_states", ["user_id", "postable_id"], name: "thredded_user_topic_read_states_user_postable", unique: true
 
+  create_table "town_citizens", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "town_id"
+    t.integer  "citizen_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "town_citizens", ["town_id"], name: "index_town_citizens_on_town_id"
+  add_index "town_citizens", ["user_id"], name: "index_town_citizens_on_user_id"
+
+  create_table "town_countries", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "town_id"
+    t.integer  "country_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "town_countries", ["country_id"], name: "index_town_countries_on_country_id"
+  add_index "town_countries", ["town_id"], name: "index_town_countries_on_town_id"
+  add_index "town_countries", ["user_id"], name: "index_town_countries_on_user_id"
+
+  create_table "town_creatures", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "town_id"
+    t.integer  "creature_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "town_creatures", ["creature_id"], name: "index_town_creatures_on_creature_id"
+  add_index "town_creatures", ["town_id"], name: "index_town_creatures_on_town_id"
+  add_index "town_creatures", ["user_id"], name: "index_town_creatures_on_user_id"
+
+  create_table "town_floras", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "town_id"
+    t.integer  "flora_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "town_floras", ["flora_id"], name: "index_town_floras_on_flora_id"
+  add_index "town_floras", ["town_id"], name: "index_town_floras_on_town_id"
+  add_index "town_floras", ["user_id"], name: "index_town_floras_on_user_id"
+
+  create_table "town_groups", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "town_id"
+    t.integer  "group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "town_groups", ["group_id"], name: "index_town_groups_on_group_id"
+  add_index "town_groups", ["town_id"], name: "index_town_groups_on_town_id"
+  add_index "town_groups", ["user_id"], name: "index_town_groups_on_user_id"
+
+  create_table "town_languages", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "town_id"
+    t.integer  "language_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "town_languages", ["language_id"], name: "index_town_languages_on_language_id"
+  add_index "town_languages", ["town_id"], name: "index_town_languages_on_town_id"
+  add_index "town_languages", ["user_id"], name: "index_town_languages_on_user_id"
+
+  create_table "town_nearby_landmarks", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "town_id"
+    t.integer  "nearby_landmark_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "town_nearby_landmarks", ["town_id"], name: "index_town_nearby_landmarks_on_town_id"
+  add_index "town_nearby_landmarks", ["user_id"], name: "index_town_nearby_landmarks_on_user_id"
+
+  create_table "towns", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "other_names"
+    t.string   "laws"
+    t.string   "sports"
+    t.string   "politics"
+    t.string   "founding_story"
+    t.string   "established_year"
+    t.string   "notes"
+    t.string   "private_notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "universe_id"
+    t.datetime "deleted_at"
+    t.string   "privacy"
+    t.integer  "user_id"
+  end
+
+  add_index "towns", ["universe_id"], name: "index_towns_on_universe_id"
+  add_index "towns", ["user_id"], name: "index_towns_on_user_id"
+
   create_table "universes", force: :cascade do |t|
     t.string   "name",            null: false
     t.text     "description"
@@ -1042,7 +1389,19 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.string   "magic_system"
     t.string   "technologies"
     t.string   "genre"
+    t.datetime "deleted_at"
   end
+
+  add_index "universes", ["deleted_at"], name: "index_universes_on_deleted_at"
+
+  create_table "user_content_type_activators", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "content_type"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "user_content_type_activators", ["user_id"], name: "index_user_content_type_activators_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
@@ -1067,11 +1426,14 @@ ActiveRecord::Schema.define(version: 20170731010449) do
     t.string   "secure_code"
     t.boolean  "fluid_preference"
     t.string   "username"
-    t.string   "forum_admin",              default: "f"
+    t.boolean  "forum_administrator",      default: false, null: false
+    t.datetime "deleted_at"
   end
 
+  add_index "users", ["deleted_at"], name: "index_users_on_deleted_at"
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["username"], name: "index_users_on_username", unique: true
 
   create_table "votables", force: :cascade do |t|
     t.string   "name"
